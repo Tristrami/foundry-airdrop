@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# 完整的 pre-commit hook
+echo "🔧 Running pre-commit checks..."
+
+# 移除 lib 目录的缓存
+if [ -d "lib" ]; then
+    if git ls-files --cached lib/ | grep -q .; then
+        git rm -r --cached lib/ > /dev/null 2>&1
+        echo "✓ Removed lib/ from git cache"
+        
+        # 重新添加 .gitignore 以确保配置正确
+        if [ -f ".gitignore" ]; then
+            git add .gitignore
+        fi
+    else
+        echo "ℹ lib/ already not in cache"
+    fi
+fi
+
+# 可以在这里添加其他 pre-commit 检查
+# 例如: npm test, linting, etc.
+
+echo "✅ Pre-commit checks completed"
+exit 0
